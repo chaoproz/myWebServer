@@ -149,9 +149,14 @@ int main(int argc, char* argv[]) {  // argc是参数个数，argv是参数值
     struct sockaddr_in address;  // 利用sockaddr_in创建socket地址（sockaddr_in用于IPv4，sockaddr_in6用于IPv6：）
     bzero(&address, sizeof(address));  // 清空address
     address.sin_family = AF_INET;  // 使用IPv4协议族
+<<<<<<< HEAD
     // h-host（主机字节序）、to（转换成什么）、n-network（网络字节序）、s-short unsigned short、l-long unsigned int
     address.sin_addr.s_addr = htonl(INADDR_ANY);  // 转换IP，将主机字节序转变为网络字节序（任何可以使用的IP地址）
     address.sin_port = htons(port);  // 转换端口号，将主机字节序转变为网络字节序
+=======
+    address.sin_addr.s_addr = htonl(INADDR_ANY);  // 任何可以使用的IP地址
+    address.sin_port = htons(port);  // 端口号，将主机字节序转变为网络字节序
+>>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
     int ret = 0;  // 用于接受bind、listen函数返回值，进而判断是否创建成功
     ret = bind(listenfd, (struct sockaddr*)&address, sizeof(address));  // 注意将address强制转换为sockaddr
     assert(ret >= 0);
@@ -178,8 +183,13 @@ int main(int argc, char* argv[]) {  // argc是参数个数，argv是参数值
     // 信号处理函数往管道的写端写入信号值，主循环则从管道的读端读出信号值
     addfd(epollfd, pipefd[0], false);
     // 传递给主循环的信号值，添加信号捕捉
+<<<<<<< HEAD
     addsig(SIGALRM, sig_handler, false);  // 由alarm系统调用产生timer时钟信号
     addsig(SIGTERM, sig_handler, false);  // 终端发送的终止信号
+=======
+    addsig(SIGALRM, sig_handler, false);
+    addsig(SIGTERM, sig_handler, false);
+>>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
     // 每隔TIMESLOT时间触发SIGALRM
     alarm(TIMESLOT);  // 设置信号SIGALRM在经过TIMESLOT秒后发送给目前的进程
     bool timeout = false;  // 超时标志
@@ -206,7 +216,11 @@ int main(int argc, char* argv[]) {  // argc是参数个数，argv是参数值
                 socklen_t client_addrlen = sizeof(client_address);
 #ifdef listenfdLT     
                 // 分配给客户端的文件描述符           
+<<<<<<< HEAD
                 int connfd = accept(listenfd, (struct sockaddr*)&client_address, &client_addrlen);  // client_address是传出参数（不能直接用sizeof(client_address)，需要有变量接收），成功则返回用于通信的文件描述符，失败返回-1
+=======
+                int connfd = accept(listenfd, (struct sockaddr*)&client_address, &client_addrlen);  // client_address是传出参数，成功则返回用于通信的文件描述符，失败返回-1
+>>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
                 if (connfd < 0) {
                     // 日志
                     LOG_ERROR("%s:errno is:%d", "accept error", errno);

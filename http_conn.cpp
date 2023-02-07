@@ -24,7 +24,11 @@ int http_conn::m_epollfd = -1;  // 所有socket上的事件都被注册到同一
 int http_conn::m_user_count = 0;  // 统计用户数量
 
 // 网站根目录，文件中存放请求的资源和跳转的html文件
+<<<<<<< HEAD
 const char* doc_root = "/home/chaopro/webServer/myWebServer/root";  
+=======
+const char* doc_root = "/home/chaopro/TinyWebServer/myWebServer/root";  
+>>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
 
 /*------------文件描述符操作----------*/
 // 设置文件描述符非阻塞
@@ -59,12 +63,20 @@ int addfd(int epollfd, int fd, bool one_shot) {
     event.events = EPOLLIN | EPOLLET | EPOLLRDHUP;
 #endif
 
+<<<<<<< HEAD
     if (one_shot) event.events |= EPOLLONESHOT;  // 注册epolloneshot事件，一个线程处理socket时，其他线程将无法处理（listenfd不用开启）
+=======
+    if (one_shot) event.events |= EPOLLONESHOT;  // 注册epolloneshot事件，一个线程处理socket时，其他线程将无法处理
+>>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
     
     // 注册内核事件表监控的文件描述符上的事件
     epoll_ctl(epollfd, EPOLL_CTL_ADD, fd, &event);  
     
+<<<<<<< HEAD
     // 设置文件描述符非阻塞（ET模式只支持非阻塞）
+=======
+    // 设置文件描述符非阻塞（因为ET模式只支持非阻塞）
+>>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
     setnonblocking(fd);  
 }
 
@@ -171,7 +183,11 @@ void http_conn::close_conn(bool real_close) {
 
 
 /*------------读----------*/
+<<<<<<< HEAD
 // 服务器主线程循环读取客户数据，直到无数据可读或对方关闭连接，如果时ET模式，则需要循环读取，而LT不需要
+=======
+// 循环读取客户数据，直到无数据可读或对方关闭连接，如果时ET模式，则需要循环读取，而LT不需要
+>>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
 bool http_conn::read() {
     // 如果读缓冲区满了，则返回false
     if (m_read_idx >= READ_BUFFER_SIZE) return false;  
@@ -204,6 +220,41 @@ bool http_conn::read() {
 #endif
 }
 
+<<<<<<< HEAD
+=======
+// 从状态机读取一行，分析是请求报文的哪一部分
+http_conn::LINE_STATUS http_conn::parse_line() {
+    char temp;
+    for (; m_checked_idx < m_read_idx; ++m_checked_idx)
+    {
+        temp = m_read_buf[m_checked_idx];
+        if (temp == '\r')
+        {
+            if ((m_checked_idx + 1) == m_read_idx)
+                return LINE_OPEN;
+            else if (m_read_buf[m_checked_idx + 1] == '\n')
+            {
+                m_read_buf[m_checked_idx++] = '\0';
+                m_read_buf[m_checked_idx++] = '\0';
+                return LINE_OK;
+            }
+            return LINE_BAD;
+        }
+        else if (temp == '\n')
+        {
+            if (m_checked_idx > 1 && m_read_buf[m_checked_idx - 1] == '\r')
+            {
+                m_read_buf[m_checked_idx - 1] = '\0';
+                m_read_buf[m_checked_idx++] = '\0';
+                return LINE_OK;
+            }
+            return LINE_BAD;
+        }
+    }
+    return LINE_OPEN;
+}
+
+>>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
 // 从m_read_buf读取，并处理请求报文
 http_conn::HTTP_CODE http_conn::process_read() {
     LINE_STATUS line_status = LINE_OK;  // line_state初始化为LINE_OK
@@ -251,6 +302,7 @@ http_conn::HTTP_CODE http_conn::process_read() {
     return NO_REQUEST;
 }
 
+<<<<<<< HEAD
 // 从状态机读取一行，标识解析一行的读取状态。
 http_conn::LINE_STATUS http_conn::parse_line() {
     char temp;
@@ -380,6 +432,9 @@ http_conn::HTTP_CODE http_conn::parse_content(char* text) {
 
 
 /*------------根据请求报文生成响应正文----------*/
+=======
+// 生成响应报文 
+>>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
 http_conn::HTTP_CODE http_conn::do_request() {
     // 将初始化的m_read_file赋值为网站根目录
     strcpy(m_read_file, doc_root);
@@ -511,6 +566,107 @@ http_conn::HTTP_CODE http_conn::do_request() {
     return FILE_REQUEST;
 }
 
+<<<<<<< HEAD
+=======
+// 解析请求行，获得请求方法、目标url，http版本
+http_conn::HTTP_CODE http_conn::parse_request_line(char* text) {
+    // 在http报文中，请求行用来说明请求类型，要访问的资源以及所使用的http版本，其中各个部分通过空格和\t分割
+    
+    // 1.请求方法提取（请求行中最先含有空格和\t任意字符的位置并返回）
+    m_url = strpbrk(text, " \t");  // strpbrk是在源字符串（text）中找出最先含有搜索字符串（" \t"）中任一字符的位置并返回
+    if (!m_url) return BAD_REQUEST;  // 如果没有空格和\t，则报文格式错误
+    *m_url++ = '\0';  // 将当前位置改为\0，用于将前面数据取出
+    char* method = text; 
+    // GET和POST请求报文的区别之一是有无消息体部分，GET请求没有消息体，当解析完空行之后，便完成了报文的解析。
+    if (strcasecmp(method, "GET") == 0) m_method = GET;  // strcasecmp忽略大小写比较字符串
+    else if (strcasecmp(method, "POST") == 0) {
+        m_method == POST;
+        cgi = 1;
+    }
+    else return BAD_REQUEST;
+
+    // 2.version提取
+    m_url += strspn(m_url, " \t");
+    m_version = strpbrk(m_url, " \t");
+    if (!m_version) return BAD_REQUEST;
+    *m_version++ = '\0';
+    m_version += strspn(m_version, " \t");
+    if (strcasecmp(m_version, "HTTP/1.1") != 0) return BAD_REQUEST;
+
+    // 3.目标url提取（http）
+    if (strncasecmp(m_url, "http://", 7) == 0) {
+        m_url += 7;
+        m_url = strchr(m_url, '/');  // 返回字符'/'第一次在字符串m_url中出现的位置，如果未找到字符，则返回 NULL
+    }
+    
+    // 3.目标url提取（https)
+    if (strncasecmp(m_url, "https://", 8) == 0) {
+        m_url += 8;
+        m_url = strchr(m_url, '/');
+    }
+
+    // 通常不会有http和https符号，如果三种情况均不符，则返回错误
+    if(!m_url || m_url[0] != '/') return BAD_REQUEST;
+
+    // 当url为/时，显示欢迎界面
+    if (strlen(m_url) == 1) strcat(m_url, "judge.html");
+    // 请求行处理完毕，将主状态机转移到请求头
+    m_check_state = CHECK_STATE_HEADER;  
+
+    return NO_REQUEST;
+}
+
+// 解析http请求头
+//解析http请求的一个头部信息
+http_conn::HTTP_CODE http_conn::parse_headers(char *text) {
+    if (text[0] == '\0') {
+        // 如果遇到空行，表示头部字段解析完毕
+        // 判断时GET请求还是POST请求
+        if (m_content_length != 0) {
+            // POST请求需要跳转到消息体处理状态
+            m_check_state = CHECK_STATE_CONTENT;
+            return NO_REQUEST;
+        }
+        return GET_REQUEST;
+    } else if (strncasecmp(text, "Connection:", 11) == 0) {
+        // 解析Connection头部字段，Connection: keep-alive
+        text += 11;
+        text += strspn(text, " \t");  // 跳过空格和\t字符（检索字符串text中第一个不在字符串" \t"中出现的字符下标）
+        if (strcasecmp(text, "keep-alive") == 0)  m_linger = true;  // 如果是长连接，则将linger标志设置为true
+    } else if (strncasecmp(text, "Content-length:", 15) == 0) {
+        // 解析Content-length头部字段
+        text += 15;
+        text += strspn(text, " \t");
+        m_content_length = atol(text);
+    } else if (strncasecmp(text, "Host:", 5) == 0) {
+        // 解析HOST字段
+        text += 5;
+        text += strspn(text, " \t");
+        m_host = text;
+    } else {
+        // 日志
+        LOG_INFO("oop!unknow header: %s", text);
+        Log::get_instance()->flush();
+    }
+    return NO_REQUEST;
+}
+
+// 解析http请求体，判断http请求是否被完整读入
+http_conn::HTTP_CODE http_conn::parse_content(char* text) {
+    // 判断buffer中是否读入了消息体
+    if (m_read_idx >= (m_content_length + m_checked_idx)) {
+        text[m_content_length] = '\0';
+
+        // POST请求中最后为输入的用户名和密码
+        m_string = text;
+        return GET_REQUEST;
+    }
+    return NO_REQUEST;
+}
+
+
+
+>>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
 
 /*------------写----------*/
 // 服务器主线程检测写事件，并调用http_conn::write函数将响应报文发送给浏览器端
@@ -696,7 +852,11 @@ bool http_conn::add_content(const char* content) {
 }
 
 
+<<<<<<< HEAD
 /*------------子线程处理读写入口----------*/
+=======
+/*------------读写入口----------*/
+>>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
 // 由线程池中的工作线程调用，这是处理http请求的入口函数
 void http_conn::process() {
     // 解析http请求
