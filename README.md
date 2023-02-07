@@ -204,17 +204,8 @@ private:
 
 ## 2.1 服务器编程的基本框架
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 <img src="https://typora-picgo-image.oss-cn-beijing.aliyuncs.com/202302071429661.png" alt="image-20221013205238082" style="zoom: 67%;" />
-=======
-<img src="E:/Study/4%E5%B7%A5%E4%BD%9C/%E9%A1%B9%E7%9B%AE/TinyWebServer/%E7%AC%94%E8%AE%B0.assets/image-20221013205238082.png" alt="image-20221013205238082" style="zoom: 67%;" />
->>>>>>> b619049b0ebfecbf4c9e63f028cf29280fd38292
-=======
-<img src="E:/Study/4%E5%B7%A5%E4%BD%9C/%E9%A1%B9%E7%9B%AE/TinyWebServer/%E7%AC%94%E8%AE%B0.assets/image-20221013205238082.png" alt="image-20221013205238082" style="zoom: 67%;" />
->>>>>>> b619049b0ebfecbf4c9e63f028cf29280fd38292
-
-
 
 - I/O处理单元：**等待并接受新的客户连接，接收客户数据，将服务器响应数据返回给客户端**（和客户端打交道）
 - 逻辑单元：**分析并处理客户数据**，然后将结果**传递给 I/O 处理单元或者直接发送给客户端**（多个逻辑单元对多个客户任务**并发**处理）
@@ -802,17 +793,8 @@ bool http_conn::read() {
   - LINE_BAD，报文语法有误
   - LINE_OPEN，读取的行不完整
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 ![image-20230206145215246](https://typora-picgo-image.oss-cn-beijing.aliyuncs.com/202302071429662.png)
-=======
-![image-20230206145215246](E:/Study/4%E5%B7%A5%E4%BD%9C/%E9%A1%B9%E7%9B%AE/TinyWebServer/%E7%AC%94%E8%AE%B0.assets/image-20230206145215246.png)
->>>>>>> b619049b0ebfecbf4c9e63f028cf29280fd38292
-=======
-![image-20230206145215246](E:/Study/4%E5%B7%A5%E4%BD%9C/%E9%A1%B9%E7%9B%AE/TinyWebServer/%E7%AC%94%E8%AE%B0.assets/image-20230206145215246.png)
->>>>>>> b619049b0ebfecbf4c9e63f028cf29280fd38292
-
-
 
 ### 4.4.4 主线程发送数据
 
