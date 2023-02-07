@@ -635,7 +635,7 @@ Accept-Language:zh-CN,zh;q=0.8
 
 - POST
 
-```http
+```
 POST / HTTP1.1
 Host:www.wrox.com
 User-Agent:Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022)
@@ -664,7 +664,7 @@ name=Professional%20Ajax&publisher=Wiley
 
 > HTTP响应也由四个部分组成，分别是：**状态行、消息报头、空行和响应正文。**
 
-```http
+```
 HTTP/1.1 200 OK
 Date: Fri, 22 May 2009 06:07:21 GMT
 Content-Type: text/html; charset=UTF-8
