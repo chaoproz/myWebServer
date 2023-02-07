@@ -620,7 +620,7 @@ void modfd(int epollfd, int fd, int ev) {
 - GET
 
 
-```http
+```
 GET /562f25980001b1b106000338.jpg HTTP/1.1
 Host:img.mukewang.com
 User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64)
