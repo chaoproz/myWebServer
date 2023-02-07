@@ -1,7 +1,11 @@
 # 整体框架
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ![图片1](https://typora-picgo-image.oss-cn-beijing.aliyuncs.com/202302071429660.png)
+=======
+![图片1](E:/Study/4%E5%B7%A5%E4%BD%9C/%E9%A1%B9%E7%9B%AE/TinyWebServer/%E7%AC%94%E8%AE%B0.assets/%E5%9B%BE%E7%89%871.png)
+>>>>>>> b619049b0ebfecbf4c9e63f028cf29280fd38292
 =======
 ![图片1](E:/Study/4%E5%B7%A5%E4%BD%9C/%E9%A1%B9%E7%9B%AE/TinyWebServer/%E7%AC%94%E8%AE%B0.assets/%E5%9B%BE%E7%89%871.png)
 >>>>>>> b619049b0ebfecbf4c9e63f028cf29280fd38292
@@ -208,7 +212,11 @@ private:
 ## 2.1 服务器编程的基本框架
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <img src="https://typora-picgo-image.oss-cn-beijing.aliyuncs.com/202302071429661.png" alt="image-20221013205238082" style="zoom: 67%;" />
+=======
+<img src="E:/Study/4%E5%B7%A5%E4%BD%9C/%E9%A1%B9%E7%9B%AE/TinyWebServer/%E7%AC%94%E8%AE%B0.assets/image-20221013205238082.png" alt="image-20221013205238082" style="zoom: 67%;" />
+>>>>>>> b619049b0ebfecbf4c9e63f028cf29280fd38292
 =======
 <img src="E:/Study/4%E5%B7%A5%E4%BD%9C/%E9%A1%B9%E7%9B%AE/TinyWebServer/%E7%AC%94%E8%AE%B0.assets/image-20221013205238082.png" alt="image-20221013205238082" style="zoom: 67%;" />
 >>>>>>> b619049b0ebfecbf4c9e63f028cf29280fd38292
@@ -802,7 +810,11 @@ bool http_conn::read() {
   - LINE_OPEN，读取的行不完整
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ![image-20230206145215246](https://typora-picgo-image.oss-cn-beijing.aliyuncs.com/202302071429662.png)
+=======
+![image-20230206145215246](E:/Study/4%E5%B7%A5%E4%BD%9C/%E9%A1%B9%E7%9B%AE/TinyWebServer/%E7%AC%94%E8%AE%B0.assets/image-20230206145215246.png)
+>>>>>>> b619049b0ebfecbf4c9e63f028cf29280fd38292
 =======
 ![image-20230206145215246](E:/Study/4%E5%B7%A5%E4%BD%9C/%E9%A1%B9%E7%9B%AE/TinyWebServer/%E7%AC%94%E8%AE%B0.assets/image-20230206145215246.png)
 >>>>>>> b619049b0ebfecbf4c9e63f028cf29280fd38292
