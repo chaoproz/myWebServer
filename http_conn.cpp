@@ -24,11 +24,8 @@ int http_conn::m_epollfd = -1;  // 所有socket上的事件都被注册到同一
 int http_conn::m_user_count = 0;  // 统计用户数量
 
 // 网站根目录，文件中存放请求的资源和跳转的html文件
-<<<<<<< HEAD
 const char* doc_root = "/home/chaopro/webServer/myWebServer/root";  
-=======
 const char* doc_root = "/home/chaopro/TinyWebServer/myWebServer/root";  
->>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
 
 /*------------文件描述符操作----------*/
 // 设置文件描述符非阻塞
@@ -63,20 +60,13 @@ int addfd(int epollfd, int fd, bool one_shot) {
     event.events = EPOLLIN | EPOLLET | EPOLLRDHUP;
 #endif
 
-<<<<<<< HEAD
     if (one_shot) event.events |= EPOLLONESHOT;  // 注册epolloneshot事件，一个线程处理socket时，其他线程将无法处理（listenfd不用开启）
-=======
     if (one_shot) event.events |= EPOLLONESHOT;  // 注册epolloneshot事件，一个线程处理socket时，其他线程将无法处理
->>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
     
     // 注册内核事件表监控的文件描述符上的事件
     epoll_ctl(epollfd, EPOLL_CTL_ADD, fd, &event);  
     
-<<<<<<< HEAD
-    // 设置文件描述符非阻塞（ET模式只支持非阻塞）
-=======
     // 设置文件描述符非阻塞（因为ET模式只支持非阻塞）
->>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
     setnonblocking(fd);  
 }
 
@@ -183,11 +173,7 @@ void http_conn::close_conn(bool real_close) {
 
 
 /*------------读----------*/
-<<<<<<< HEAD
 // 服务器主线程循环读取客户数据，直到无数据可读或对方关闭连接，如果时ET模式，则需要循环读取，而LT不需要
-=======
-// 循环读取客户数据，直到无数据可读或对方关闭连接，如果时ET模式，则需要循环读取，而LT不需要
->>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
 bool http_conn::read() {
     // 如果读缓冲区满了，则返回false
     if (m_read_idx >= READ_BUFFER_SIZE) return false;  
@@ -220,8 +206,6 @@ bool http_conn::read() {
 #endif
 }
 
-<<<<<<< HEAD
-=======
 // 从状态机读取一行，分析是请求报文的哪一部分
 http_conn::LINE_STATUS http_conn::parse_line() {
     char temp;
@@ -254,7 +238,6 @@ http_conn::LINE_STATUS http_conn::parse_line() {
     return LINE_OPEN;
 }
 
->>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
 // 从m_read_buf读取，并处理请求报文
 http_conn::HTTP_CODE http_conn::process_read() {
     LINE_STATUS line_status = LINE_OK;  // line_state初始化为LINE_OK
@@ -302,7 +285,6 @@ http_conn::HTTP_CODE http_conn::process_read() {
     return NO_REQUEST;
 }
 
-<<<<<<< HEAD
 // 从状态机读取一行，标识解析一行的读取状态。
 http_conn::LINE_STATUS http_conn::parse_line() {
     char temp;
@@ -432,9 +414,6 @@ http_conn::HTTP_CODE http_conn::parse_content(char* text) {
 
 
 /*------------根据请求报文生成响应正文----------*/
-=======
-// 生成响应报文 
->>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
 http_conn::HTTP_CODE http_conn::do_request() {
     // 将初始化的m_read_file赋值为网站根目录
     strcpy(m_read_file, doc_root);
@@ -566,8 +545,6 @@ http_conn::HTTP_CODE http_conn::do_request() {
     return FILE_REQUEST;
 }
 
-<<<<<<< HEAD
-=======
 // 解析请求行，获得请求方法、目标url，http版本
 http_conn::HTTP_CODE http_conn::parse_request_line(char* text) {
     // 在http报文中，请求行用来说明请求类型，要访问的资源以及所使用的http版本，其中各个部分通过空格和\t分割
@@ -665,8 +642,6 @@ http_conn::HTTP_CODE http_conn::parse_content(char* text) {
 }
 
 
-
->>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
 
 /*------------写----------*/
 // 服务器主线程检测写事件，并调用http_conn::write函数将响应报文发送给浏览器端
@@ -852,11 +827,7 @@ bool http_conn::add_content(const char* content) {
 }
 
 
-<<<<<<< HEAD
 /*------------子线程处理读写入口----------*/
-=======
-/*------------读写入口----------*/
->>>>>>> bf7723c55c92d67fd49ab6503b8fc273c0bdb8fd
 // 由线程池中的工作线程调用，这是处理http请求的入口函数
 void http_conn::process() {
     // 解析http请求
